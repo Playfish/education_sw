@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>six_dof_arm_description</name>
+  <version>0.0.1</version>
+  <description>The six_dof_arm package</description>
+
+  <maintainer email="1271087623@qq.com">Carl</maintainer>
+
+  <license>TODO</license>
+
+  <author email="1271087623@qq.com">Carl</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rviz</build_depend>
+  <build_depend>urdf</build_depend>
+  <build_depend>xacro</build_depend>
+
+  <build_export_depend>rviz</build_export_depend>
+  <build_export_depend>urdf</build_export_depend>
+  <build_export_depend>xacro</build_export_depend>
+
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>urdf</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+
+  <export>
+  </export>
+</package>

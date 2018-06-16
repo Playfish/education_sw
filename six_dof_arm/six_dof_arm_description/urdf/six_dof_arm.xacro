@@ -1,0 +1,265 @@
+<?xml version="1.0"?>
+
+<robot name="six_dof_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:include filename="$(find six_dof_arm_description)/urdf/common_config.urdf.xacro"/>
+<xacro:include filename="$(find six_dof_arm_description)/urdf/common_properties.urdf.xacro"/>
+<xacro:include filename="$(find six_dof_arm_description)/urdf/six_dof_arm_gazebo.urdf.xacro"/>
+<xacro:include filename="$(find six_dof_arm_description)/urdf/six_dof_arm_transmission.urdf.xacro"/>
+
+<!-- BOTTOM FIXED LINK 
+This link is the base of the arm in which arm is placed -->
+
+  <joint name="bottom_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="bottom_link"/>
+  </joint>
+
+  <link name="bottom_link">
+    <visual>
+      <origin xyz=" 0 0 -0.04"  rpy="0 0 0"/>
+      <geometry>
+        <box size="1 1 0.02" />
+      </geometry>
+      <material name="Brown" />
+    </visual>
+
+    <collision>
+      <origin xyz=" 0 0 -0.04"  rpy="0 0 0"/>
+      <geometry>
+        <box size="1 1 0.02" />
+      </geometry>
+      </collision>>
+  </link>
+
+  <!-- BASE LINK -->
+  <link name="base_link">
+
+    <visual>
+      <!-- rotate PI/2 -->
+      <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+      <geometry>
+        <box size="0.2 0.05 0.2" />
+      </geometry>
+      <xacro:insert_block name="material_grey" />
+    </visual>
+
+    <collision>
+      <!-- rotate PI/2 -->
+      <origin xyz="0 0 0" rpy="${M_PI/2} 0 0" />
+      <geometry>
+        <box size="0.1 0.1 0.1" />
+      </geometry>
+      </collision>>
+    <xacro:inertial_matrix mass="1"/>
+
+  </link>
+
+  <joint name="shoulder_pan_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="shoulder_pan_link"/>
+    <origin xyz="0 0 0.05" rpy="0 ${M_PI/2} ${M_PI*0}" />
+    <axis xyz="-1 0 0" />
+    <limit effort="300" velocity="1" lower="-2.61799387799" upper="1.98394848567"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <!-- SHOULDER PAN LINK -->
+  <link name="shoulder_pan_link" >
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <cylinder radius="${shoulder_pan_width}" length="${shoulder_pan_len}"/>
+      </geometry>
+      <xacro:insert_block name="material_blue" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <cylinder radius="${shoulder_pan_width}" length="${shoulder_pan_len}"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="shoulder_pitch_joint" type="fixed">
+    <parent link="shoulder_pan_link"/>
+    <child link="shoulder_pitch_mount_link"/>
+    <origin xyz="${-shoulder_pan_len/3*2} 0.0021 0.0" rpy="-${M_PI} 0 0" />
+  </joint>
+
+  <link name="shoulder_pitch_mount_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="-${M_PI/2} 0 0"/>
+      <geometry>
+        <mesh filename="package://six_dof_arm_description/meshes/wrist.stl"/>
+      </geometry>
+      <xacro:insert_block name="material_blue" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="-${M_PI/2} 0 0" />
+      <geometry>
+        <mesh filename="package://six_dof_arm_description/meshes/wrist.stl"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="shoulder_pitch_mount_joint" type="revolute">
+    <parent link="shoulder_pitch_mount_link"/>
+    <child link="shoulder_pitch_link"/>
+    <origin xyz="-${shoulder_pan_len/3} 0.0 0.0" rpy="0 -${M_PI/2} 0 " />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-1.19962513147" upper="1.89994105047" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <!-- SHOULDER PITCH LINK -->
+  <link name="shoulder_pitch_link" >
+
+    <visual>
+      <origin xyz="-0.002 0 0.04" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <box size="${shoulder_pitch_len} ${shoulder_pitch_width} ${shoulder_pitch_height}" />
+      </geometry>
+      <xacro:insert_block name="material_white" />
+    </visual>
+
+    <collision>
+      <origin xyz="-0.002 0 0.04" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <box size="${shoulder_pitch_len} ${shoulder_pitch_width} ${shoulder_pitch_height}" />
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="elbow_roll_joint" type="revolute">
+    <parent link="shoulder_pitch_link"/>
+    <child link="elbow_roll_link"/>
+    <origin xyz="-0.002 0 0.1206" rpy="${M_PI} ${M_PI/2} 0" />
+    <axis xyz="-1 0 0" />
+    <limit effort="300" velocity="1" lower="-2.61799387799" upper="0.705631162427" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <!-- ELBOW ROLL LINK -->
+  <link name="elbow_roll_link" >
+
+    <visual>
+      <origin xyz="-0.015 0.0 -0.0" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <cylinder radius="${elbow_roll_width}" length="${elbow_roll_len}"/>
+      </geometry>
+      <xacro:insert_block name="material_black" />
+    </visual>
+
+    <collision>
+      <origin xyz="-0.015 0.0 -0.0" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <cylinder radius="${elbow_roll_width}" length="${elbow_roll_len}"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="elbow_pitch_joint" type="revolute">
+    <parent link="elbow_roll_link"/>
+    <child link="elbow_pitch_link"/>
+    <origin xyz="-0.035 0 0.0" rpy="0.055 ${M_PI/2} 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-1.5953400194" upper="1.93281579274" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <!-- ELBOW PITCH LINK -->
+  <link name="elbow_pitch_link" >
+
+    <visual>
+      <origin xyz="0 0 -0.12" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <box size="${elbow_pitch_len} ${elbow_pitch_width} ${elbow_pitch_height}" />
+      </geometry>
+      <xacro:insert_block name="material_blue" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 -0.12" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+       <box size="${elbow_pitch_len} ${elbow_pitch_width} ${elbow_pitch_height}" />
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="wrist_roll_joint" type="revolute">
+    <parent link="elbow_pitch_link"/>
+    <child link="wrist_roll_link"/>
+    <origin xyz="0.0 0.0081 -.248" rpy="0 ${M_PI/2} ${M_PI}" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-2.61799387799" upper="2.6128806087" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <!-- WRIST ROLL LINK -->
+  <link name="wrist_roll_link" >
+    <visual>
+      <origin xyz="0 0 0" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <cylinder radius="${elbow_roll_width}" length="${elbow_roll_len}"/>
+      </geometry>
+      <xacro:insert_block name="material_black" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <cylinder radius="${elbow_roll_width}" length="${elbow_roll_len}"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+
+  </link>
+
+  <joint name="wrist_pitch_joint" type="revolute">
+    <parent link="wrist_roll_link"/>
+    <child link="wrist_pitch_link"/>
+    <origin xyz="0.0 0.0 0.0001" rpy="0 ${M_PI/2} 0" />
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="1" lower="-1.5953400194" upper="1.98394848567" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <!-- WRIST PITCH LINK -->
+  <link name="wrist_pitch_link">
+
+    <visual>
+      <origin xyz="0 0 0.04" rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <box size="${wrist_pitch_len} ${wrist_pitch_width} ${wrist_pitch_height}" />
+      </geometry>
+      <xacro:insert_block name="material_white" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0.04 " rpy="0 ${M_PI/2} 0" />
+      <geometry>
+        <box size="${wrist_pitch_len} ${wrist_pitch_width} ${wrist_pitch_height}" />
+      </geometry>
+    </collision>
+    <xacro:inertial_matrix mass="1"/>
+
+  </link>
+
+  <!-- Transmissions for ROS Control -->
+
+  <xacro:transmission_block joint_name="shoulder_pan_joint"/>
+  <xacro:transmission_block joint_name="shoulder_pitch_joint"/>
+  <xacro:transmission_block joint_name="elbow_roll_joint"/>
+  <xacro:transmission_block joint_name="elbow_pitch_joint"/>
+  <xacro:transmission_block joint_name="wrist_roll_joint"/>
+  <xacro:transmission_block joint_name="wrist_pitch_joint"/>
+
+</robot>

@@ -1,0 +1,37 @@
+VFHPlannerROS:
+
+# Topic Parameters
+  scan_topic_: "scan"
+  odom_topic_: "odom"
+
+# Safety distance Parameters
+  m_safety_dist_0ms: 100               # 100 - mm, double, safe distance at 0 m/s
+  m_safety_dist_1ms: 100               # 100 - mm, double, safe distance at 1 m/s
+
+# Velocity Parameters
+  m_max_speed: 200                     # 200 - mm/sec, int, max speed
+  m_max_speed_narrow_opening: 200      # 200 - mm/sec, int, max speed in the narrow opening
+  m_max_speed_wide_opening: 300        # 300 - mm/sec, int, max speed in the wide opening
+
+  m_max_acceleration: 200              # 200 - mm/sec^2, int, max acceleration
+
+  m_min_turnrate: 40                   # 40  - deg/sec, int, min turn rate <--- not used
+  m_max_turnrate_0ms: 40               # 40  - deg/sec, int, max turn rate at 0 m/s
+  m_max_turnrate_1ms: 40               # 40  - deg/sec, int, max turn rate at 1 m/s
+
+# VFH Parameters
+  m_free_space_cutoff_0ms: 2000000.0   # 2000000.0 - double, low threshold free space at 0 m/s
+  m_obs_cutoff_0ms: 4000000.0          # 4000000.0 - double, high threshold obstacle at 0 m/s
+
+  m_free_space_cutoff_1ms: 2000000.0   # 2000000.0 - double, low threshold free space at 1 m/s
+  m_obs_cutoff_1ms: 4000000.0          # 4000000.0 - double, high threshold obstacle at 1 m/s
+
+  m_weight_desired_dir: 10.0           # 10.0 - double, weight desired direction
+  m_weight_current_dir: 1.0            # 1.0  - double, weight current direction
+
+  m_robot_radius: 300.0                # 300.0 - robot radius in mm
+
+
+# Goal Tolerance Parameters
+  yaw_goal_tolerance: 0.05
+  xy_goal_tolerance: 0.10

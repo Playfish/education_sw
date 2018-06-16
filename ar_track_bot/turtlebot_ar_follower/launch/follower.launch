@@ -1,0 +1,26 @@
+<!--
+  The turtlebot AR follower nodelet.
+ -->
+<launch>
+  <include file="$(find turtlebot_ar_follower)/launch/includes/velocity_smoother.launch.xml">
+    <arg name="nodelet_manager"  value="/mobile_base_nodelet_manager"/>
+    <arg name="navigation_topic" value="/cmd_vel_mux/input/navi"/>
+  </include>
+
+  <node pkg="nodelet" type="nodelet" name="turtlebot_ar_manager" args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="turtlebot_ar_follower"
+        args="load turtlebot_ar_follower/TurtlebotARFollower /turtlebot_ar_manager">
+    <remap from="turtlebot_ar_follower/cmd_vel" to="follower_velocity_smoother/raw_cmd_vel"/>
+    <remap from="ar_pose_marker" to="/ar_pose_marker"/>
+    <param name="max_x" value="20.0" />
+    <param name="goal_x" value="0.7" />
+    <param name="x_threshold" value="0.1" />
+    <param name="y_threshold" value="0.05" />
+    <param name="y_scale" value="1.0" />
+    <param name="x_scale" value="1.0" />
+    <param name="max_angular_speed" value="5.0" />
+    <param name="min_angular_speed" value="0.5" />
+    <param name="max_linear_speed" value="0.5" />
+    <param name="min_linear_speed" value="0.05" />
+  </node>
+</launch>

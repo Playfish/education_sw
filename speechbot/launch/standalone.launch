@@ -1,0 +1,13 @@
+<!-- Example/standalone launcher for Speechbot sending goal based on navigation with map -->
+
+<launch>
+  <node pkg="nodelet" type="nodelet" name="speechbot_nav_manager"  args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="speechbot" args="load speechbot/Speechbot speechbot_nav_manager">
+    <remap from="/recognizer/output" to="/recognizer/output"/>
+    <remap from="/move_base_simple/goal" to="/move_base_simple/goal"/>
+    <param name="goal_posistion_x" type="double" value="0.0"/>
+    <param name="goal_posistion_y" type="double" value="0.0"/>
+    <param name="goal_posistion_z" type="double" value="0.0"/>
+    <param name="goal_orientation_z" type="double" value="0.0"/>
+  </node>
+</launch>

@@ -1,0 +1,7 @@
+<library path="lib/libspeechbot">
+  <class name="speechbot/Speechbot" type="speechbot::Speechbot" base_class_type="nodelet::Nodelet">
+    <description>
+      The speech robot node.
+    </description>
+  </class>
+</library> 
